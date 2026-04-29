@@ -44,6 +44,10 @@ npm run dev
 
 Open http://localhost:5173 in your browser.
 
+### API Documentation
+
+Swagger UI is available at http://localhost:3000/docs when the backend is running.
+
 ### Docker (alternative)
 
 ```bash
