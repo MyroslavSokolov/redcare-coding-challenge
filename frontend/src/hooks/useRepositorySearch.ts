@@ -32,6 +32,9 @@ export function useRepositorySearch(): UseRepositorySearchReturn {
       if (criteria.createdAfter) {
         params.createdAfter = criteria.createdAfter;
       }
+      if (criteria.perPage) {
+        params.perPage = String(criteria.perPage);
+      }
 
       const response = await axios.get<{ data: ScoredRepository[]; totalCount: number }>(
         '/api/repositories/search',

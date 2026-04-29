@@ -103,8 +103,8 @@ describe('GitHubApiService', () => {
             q: 'language:python created:>=2024-06-01',
             sort: 'stars',
             order: 'desc',
+            per_page: 30,
           },
-          timeout: 10000,
         }),
       );
     });
@@ -123,6 +123,7 @@ describe('GitHubApiService', () => {
             q: 'language:rust',
             sort: 'stars',
             order: 'desc',
+            per_page: 30,
           },
         }),
       );

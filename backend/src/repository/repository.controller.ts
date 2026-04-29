@@ -12,6 +12,7 @@ export class RepositoryController {
     return this.repositoryService.searchRepositories(
       query.language,
       query.createdAfter,
+      query.perPage,
     );
   }
 }

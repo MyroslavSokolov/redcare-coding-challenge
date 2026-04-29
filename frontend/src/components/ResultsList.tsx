@@ -93,6 +93,7 @@ export function ResultsList({ results }: ResultsListProps) {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell align="right">#</TableCell>
             {columns.map((col) => (
               <TableCell key={col.id} align={col.align}>
                 <TableSortLabel
@@ -108,8 +109,9 @@ export function ResultsList({ results }: ResultsListProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedResults.map((repo) => (
+          {sortedResults.map((repo, index) => (
             <TableRow key={repo.fullName}>
+              <TableCell align="right">{index + 1}</TableCell>
               <TableCell>
                 <a href={repo.url} target="_blank" rel="noopener noreferrer">
                   {repo.name}

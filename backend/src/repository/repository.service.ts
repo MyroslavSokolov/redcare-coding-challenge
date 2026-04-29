@@ -13,10 +13,12 @@ export class RepositoryService {
   async searchRepositories(
     language: string,
     createdAfter?: string,
+    perPage: number = 30,
   ): Promise<SearchResult> {
     const repositories = await this.githubApiService.searchRepositories(
       language,
       createdAfter,
+      perPage,
     );
 
     const scored = this.scoringService.scoreRepositories(repositories);

@@ -19,6 +19,7 @@ export class GitHubApiService {
   async searchRepositories(
     language: string,
     createdAfter?: string,
+    perPage: number = 30,
   ): Promise<GitHubRepository[]> {
     const query = this.buildQuery(language, createdAfter);
 
@@ -31,6 +32,7 @@ export class GitHubApiService {
               q: query,
               sort: 'stars',
               order: 'desc',
+              per_page: perPage,
             },
             timeout: GitHubApiService.TIMEOUT_MS,
           },

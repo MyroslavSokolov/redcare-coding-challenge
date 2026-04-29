@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, MenuItem } from '@mui/material';
 import type { SearchCriteria } from '../types';
+
+const PER_PAGE_OPTIONS = [10, 30, 50, 100] as const;
 
 export interface SearchFormProps {
   onSearch: (criteria: SearchCriteria) => void;
@@ -8,12 +10,13 @@ export interface SearchFormProps {
 }
 
 /**
- * SearchForm renders language and optional creation-date inputs,
+ * SearchForm renders language, optional creation-date, and results-per-page inputs,
  * validates them client-side, and calls `onSearch` with the criteria.
  */
 export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
   const [language, setLanguage] = useState('');
   const [createdAfter, setCreatedAfter] = useState('');
+  const [perPage, setPerPage] = useState<number>(30);
   const [languageError, setLanguageError] = useState('');
   const [dateError, setDateError] = useState('');
 
@@ -48,7 +51,7 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
 
     if (!validate()) return;
 
-    const criteria: SearchCriteria = { language: language.trim() };
+    const criteria: SearchCriteria = { language: language.trim(), perPage };
     if (createdAfter) {
       criteria.createdAfter = createdAfter;
     }
@@ -76,6 +79,20 @@ export function SearchForm({ onSearch, isLoading }: SearchFormProps) {
         size="small"
         slotProps={{ inputLabel: { shrink: true } }}
       />
+      <TextField
+        label="Results"
+        select
+        value={perPage}
+        onChange={(e) => setPerPage(Number(e.target.value))}
+        size="small"
+        sx={{ minWidth: 100 }}
+      >
+        {PER_PAGE_OPTIONS.map((option) => (
+          <MenuItem key={option} value={option}>
+            Top {option}
+          </MenuItem>
+        ))}
+      </TextField>
       <Button type="submit" variant="contained" disabled={isLoading} size="medium" sx={{ mt: '4px' }}>
         Search
       </Button>

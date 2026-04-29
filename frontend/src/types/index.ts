@@ -6,4 +6,5 @@ export type { ScoredRepository, ApiErrorResponse } from '@github-repo-scorer/sha
 export interface SearchCriteria {
   language: string;
   createdAfter?: string; // ISO 8601 date string or undefined
+  perPage?: number;
 }

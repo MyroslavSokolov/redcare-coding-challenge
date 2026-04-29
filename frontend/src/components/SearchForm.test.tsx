@@ -56,6 +56,6 @@ describe('SearchForm', () => {
 
     fireEvent.submit(screen.getByRole('button', { name: /search/i }));
 
-    expect(onSearch).toHaveBeenCalledWith({ language: 'python' });
+    expect(onSearch).toHaveBeenCalledWith({ language: 'python', perPage: 30 });
   });
 });

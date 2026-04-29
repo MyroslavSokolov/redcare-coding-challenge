@@ -110,6 +110,7 @@ describe('RepositoryController', () => {
       expect(mockRepositoryService.searchRepositories).toHaveBeenCalledWith(
         'typescript',
         undefined,
+        30,
       );
     });
 
@@ -127,6 +128,7 @@ describe('RepositoryController', () => {
       expect(mockRepositoryService.searchRepositories).toHaveBeenCalledWith(
         'python',
         '2024-01-01',
+        30,
       );
     });
   });
