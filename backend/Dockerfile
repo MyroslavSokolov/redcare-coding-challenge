@@ -1,27 +1,31 @@
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+# Copy everything needed
+COPY package.json ./
+COPY shared/ ./shared/
+COPY backend/ ./backend/
+
+# Clean install for Linux
+RUN npm install --include=dev --package-lock-only && npm install --include=dev
+
+# Build using tsc directly (avoids nest CLI resolution issues in Docker)
+RUN cd backend && npx tsc -p tsconfig.build.json
+
+# Production stage
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy workspace root and shared package
 COPY package.json ./
 COPY shared/ ./shared/
-
-# Copy backend package files
 COPY backend/package.json ./backend/
-COPY backend/nest-cli.json ./backend/
-COPY backend/tsconfig.json ./backend/
-COPY backend/tsconfig.build.json ./backend/
 
-# Fresh install for Linux — include devDependencies for build
-RUN npm install --workspace=backend --workspace=shared --include=dev --package-lock-only
-RUN npm install --workspace=backend --workspace=shared --include=dev
+RUN npm install --omit=dev --package-lock-only && npm install --omit=dev
 
-# Copy backend source
-COPY backend/src/ ./backend/src/
-
-# Build
-RUN cd backend && npx nest build
+COPY --from=build /app/backend/dist ./backend/dist
 
 EXPOSE 3000
 
-CMD ["node", "backend/dist/main.js"]
+CMD ["node", "backend/dist/src/main.js"]

@@ -2,24 +2,16 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Copy workspace root and shared package
+# Copy everything needed for install and build
 COPY package.json ./
 COPY shared/ ./shared/
+COPY frontend/ ./frontend/
 
-# Copy frontend package files
-COPY frontend/package.json ./frontend/
-COPY frontend/tsconfig.json ./frontend/
-COPY frontend/vite.config.ts ./frontend/
-COPY frontend/index.html ./frontend/
+# Install all dependencies fresh for Linux
+RUN npm install --include=dev --package-lock-only
+RUN npm install --include=dev
 
-# Fresh install for Linux — include devDependencies for build
-RUN npm install --workspace=frontend --workspace=shared --include=dev --package-lock-only
-RUN npm install --workspace=frontend --workspace=shared --include=dev
-
-# Copy frontend source
-COPY frontend/src/ ./frontend/src/
-
-# Build
+# Build the frontend
 RUN npm run build --workspace=frontend
 
 # Serve with nginx
