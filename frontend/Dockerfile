@@ -3,13 +3,14 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Copy workspace root and shared package
-COPY package.json package-lock.json ./
+COPY package.json ./
 COPY shared/ ./shared/
 
 # Copy frontend package files
 COPY frontend/package.json ./frontend/
 
-# Install dependencies
+# Fresh install for Linux (ignore Windows lock file)
+RUN npm install --workspace=frontend --workspace=shared --package-lock-only
 RUN npm install --workspace=frontend --workspace=shared
 
 # Copy frontend source

@@ -3,13 +3,14 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy workspace root and shared package
-COPY package.json package-lock.json ./
+COPY package.json ./
 COPY shared/ ./shared/
 
 # Copy backend package files
 COPY backend/package.json ./backend/
 
-# Install dependencies
+# Fresh install for Linux (ignore Windows lock file)
+RUN npm install --workspace=backend --workspace=shared --package-lock-only
 RUN npm install --workspace=backend --workspace=shared
 
 # Copy backend source
