@@ -8,16 +8,19 @@ COPY shared/ ./shared/
 
 # Copy backend package files
 COPY backend/package.json ./backend/
+COPY backend/nest-cli.json ./backend/
+COPY backend/tsconfig.json ./backend/
+COPY backend/tsconfig.build.json ./backend/
 
-# Fresh install for Linux (ignore Windows lock file)
-RUN npm install --workspace=backend --workspace=shared --package-lock-only
-RUN npm install --workspace=backend --workspace=shared
+# Fresh install for Linux — include devDependencies for build
+RUN npm install --workspace=backend --workspace=shared --include=dev --package-lock-only
+RUN npm install --workspace=backend --workspace=shared --include=dev
 
 # Copy backend source
-COPY backend/ ./backend/
+COPY backend/src/ ./backend/src/
 
 # Build
-RUN npm run build --workspace=backend
+RUN cd backend && npx nest build
 
 EXPOSE 3000
 

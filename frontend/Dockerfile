@@ -8,13 +8,16 @@ COPY shared/ ./shared/
 
 # Copy frontend package files
 COPY frontend/package.json ./frontend/
+COPY frontend/tsconfig.json ./frontend/
+COPY frontend/vite.config.ts ./frontend/
+COPY frontend/index.html ./frontend/
 
-# Fresh install for Linux (ignore Windows lock file)
-RUN npm install --workspace=frontend --workspace=shared --package-lock-only
-RUN npm install --workspace=frontend --workspace=shared
+# Fresh install for Linux — include devDependencies for build
+RUN npm install --workspace=frontend --workspace=shared --include=dev --package-lock-only
+RUN npm install --workspace=frontend --workspace=shared --include=dev
 
 # Copy frontend source
-COPY frontend/ ./frontend/
+COPY frontend/src/ ./frontend/src/
 
 # Build
 RUN npm run build --workspace=frontend
@@ -22,10 +25,7 @@ RUN npm run build --workspace=frontend
 # Serve with nginx
 FROM nginx:alpine
 
-# Copy built assets
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
-
-# Copy nginx config for API proxy
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
