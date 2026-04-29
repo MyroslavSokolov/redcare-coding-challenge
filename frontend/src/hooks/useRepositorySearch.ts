@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
-import type { SearchCriteria, ScoredRepository, ApiError } from '../types';
+import type { SearchCriteria, ScoredRepository, ApiErrorResponse } from '../types';
 
 export interface UseRepositorySearchReturn {
   results: ScoredRepository[];
   isLoading: boolean;
-  error: ApiError | null;
+  error: ApiErrorResponse | null;
   search: (criteria: SearchCriteria) => Promise<void>;
 }
 
@@ -14,12 +14,12 @@ export interface UseRepositorySearchReturn {
  *
  * - Sets `isLoading` before the request and clears it on response (success or error).
  * - Parses success responses into `ScoredRepository[]`.
- * - Parses error responses into `ApiError`.
+ * - Parses error responses into `ApiErrorResponse`.
  */
 export function useRepositorySearch(): UseRepositorySearchReturn {
   const [results, setResults] = useState<ScoredRepository[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ApiError | null>(null);
+  const [error, setError] = useState<ApiErrorResponse | null>(null);
 
   const search = useCallback(async (criteria: SearchCriteria): Promise<void> => {
     setIsLoading(true);
@@ -40,7 +40,7 @@ export function useRepositorySearch(): UseRepositorySearchReturn {
 
       setResults(response.data.data);
     } catch (err) {
-      const axiosError = err as AxiosError<ApiError>;
+      const axiosError = err as AxiosError<ApiErrorResponse>;
 
       if (axiosError.response?.data) {
         setError(axiosError.response.data);

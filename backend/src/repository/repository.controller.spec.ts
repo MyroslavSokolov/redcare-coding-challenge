@@ -4,7 +4,7 @@ import request from 'supertest';
 import { RepositoryController } from './repository.controller';
 import { RepositoryService } from './repository.service';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ScoredRepository, SearchResult } from './interfaces/scored-repository.interface';
+import { ScoredRepository, SearchResult } from '@github-repo-scorer/shared';
 
 describe('RepositoryController', () => {
   let app: INestApplication;

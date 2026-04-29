@@ -1,0 +1,9 @@
+{
+  "name": "github-repo-scorer",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "backend",
+    "frontend"
+  ]
+}

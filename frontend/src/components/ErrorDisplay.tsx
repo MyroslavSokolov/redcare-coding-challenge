@@ -1,8 +1,8 @@
 import { Alert } from '@mui/material';
-import type { ApiError } from '../types';
+import type { ApiErrorResponse } from '../types';
 
 export interface ErrorDisplayProps {
-  error: ApiError | null;
+  error: ApiErrorResponse | null;
 }
 
 /**

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { GitHubRateLimitException, GitHubTimeoutException } from '../../github/exceptions';
-import { ApiErrorResponse } from '../interfaces/api-error-response.interface';
+import { ApiErrorResponse } from '@github-repo-scorer/shared';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {

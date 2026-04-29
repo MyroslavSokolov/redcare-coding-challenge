@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { SearchQueryDto } from './dto/search-query.dto';
-import { SearchResult } from './interfaces/scored-repository.interface';
+import { SearchResult } from '@github-repo-scorer/shared';
 
 @Controller('api/repositories')
 export class RepositoryController {

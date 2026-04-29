@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GitHubApiService } from '../github/github-api.service';
 import { ScoringService } from '../scoring/scoring.service';
-import { SearchResult } from './interfaces/scored-repository.interface';
+import { SearchResult } from '@github-repo-scorer/shared';
 
 @Injectable()
 export class RepositoryService {

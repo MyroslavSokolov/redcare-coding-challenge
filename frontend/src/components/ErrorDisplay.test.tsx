@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ErrorDisplay } from './ErrorDisplay';
-import type { ApiError } from '../types';
+import type { ApiErrorResponse } from '../types';
 
 describe('ErrorDisplay', () => {
   it('renders an error alert with the error message', () => {
-    const error: ApiError = {
+    const error: ApiErrorResponse = {
       statusCode: 500,
       message: 'Internal server error',
       error: 'Internal Server Error',
@@ -24,7 +24,7 @@ describe('ErrorDisplay', () => {
   });
 
   it('displays rate limit error message with reset time', () => {
-    const error: ApiError = {
+    const error: ApiErrorResponse = {
       statusCode: 429,
       message: 'GitHub API rate limit exceeded. Resets at 2025-01-15T12:00:00Z',
       error: 'Too Many Requests',
@@ -39,7 +39,7 @@ describe('ErrorDisplay', () => {
   });
 
   it('renders alert with error severity', () => {
-    const error: ApiError = {
+    const error: ApiErrorResponse = {
       statusCode: 400,
       message: 'Bad request',
       error: 'Bad Request',

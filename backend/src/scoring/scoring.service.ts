@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GitHubRepository } from '../github/interfaces/github-repository.interface';
-import { ScoredRepository } from '../repository/interfaces/scored-repository.interface';
+import { ScoredRepository } from '@github-repo-scorer/shared';
 
 /**
  * ScoringService computes popularity scores for GitHub repositories.
