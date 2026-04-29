@@ -6,14 +6,20 @@ import { GitHubApiService } from './github-api.service';
 import { GitHubRateLimitException } from './exceptions/github-rate-limit.exception';
 import { GitHubTimeoutException } from './exceptions/github-timeout.exception';
 import { GitHubRepository } from './interfaces/github-repository.interface';
+import { TtlCacheService } from '../common/cache/ttl-cache.service';
 
 describe('GitHubApiService', () => {
   let service: GitHubApiService;
   let httpService: { get: jest.Mock };
+  let cache: TtlCacheService;
 
   beforeEach(() => {
     httpService = { get: jest.fn() };
-    service = new GitHubApiService(httpService as unknown as HttpService);
+    cache = new TtlCacheService();
+    service = new GitHubApiService(
+      httpService as unknown as HttpService,
+      cache,
+    );
   });
 
   /** Helper to build a minimal AxiosResponse. */

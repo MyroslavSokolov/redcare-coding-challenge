@@ -7,20 +7,32 @@ import {
   GitHubRateLimitException,
   GitHubTimeoutException,
 } from './exceptions';
+import { TtlCacheService } from '../common/cache/ttl-cache.service';
 
 @Injectable()
 export class GitHubApiService {
   private static readonly GITHUB_SEARCH_URL =
     'https://api.github.com/search/repositories';
   private static readonly TIMEOUT_MS = 10000;
+  private static readonly CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly cache: TtlCacheService,
+  ) {}
 
   async searchRepositories(
     language: string,
     createdAfter?: string,
     perPage: number = 30,
   ): Promise<GitHubRepository[]> {
+    const cacheKey = this.buildCacheKey(language, createdAfter, perPage);
+    const cached = this.cache.get<GitHubRepository[]>(cacheKey);
+
+    if (cached) {
+      return cached;
+    }
+
     const query = this.buildQuery(language, createdAfter);
 
     try {
@@ -39,7 +51,10 @@ export class GitHubApiService {
         ),
       );
 
-      return response.data.items;
+      const items = response.data.items;
+      this.cache.set(cacheKey, items, GitHubApiService.CACHE_TTL_MS);
+
+      return items;
     } catch (error) {
       this.handleError(error);
     }
@@ -47,7 +62,6 @@ export class GitHubApiService {
 
   private handleError(error: unknown): never {
     if (error instanceof AxiosError) {
-      // Detect timeout errors (ECONNABORTED or ETIMEDOUT)
       if (
         error.code === 'ECONNABORTED' ||
         error.code === 'ETIMEDOUT'
@@ -58,7 +72,6 @@ export class GitHubApiService {
       if (error.response) {
         const { status, headers } = error.response;
 
-        // Detect rate limit: HTTP 403 with x-ratelimit-remaining: 0
         if (
           status === 403 &&
           headers['x-ratelimit-remaining'] === '0'
@@ -70,7 +83,6 @@ export class GitHubApiService {
           throw new GitHubRateLimitException(resetTime);
         }
 
-        // Forward other 4xx/5xx errors
         const message =
           error.response.data?.message ||
           error.message ||
@@ -79,7 +91,6 @@ export class GitHubApiService {
       }
     }
 
-    // Fallback for unexpected errors
     throw new HttpException(
       'An unexpected error occurred while contacting GitHub API',
       HttpStatus.BAD_GATEWAY,
@@ -94,5 +105,9 @@ export class GitHubApiService {
     }
 
     return query;
+  }
+
+  private buildCacheKey(language: string, createdAfter?: string, perPage?: number): string {
+    return `${language}:${createdAfter ?? ''}:${perPage ?? 30}`;
   }
 }
