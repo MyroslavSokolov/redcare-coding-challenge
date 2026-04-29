@@ -16,10 +16,14 @@ export class GitHubApiService {
   private static readonly TIMEOUT_MS = 10000;
   private static readonly CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 
+  private readonly githubToken?: string;
+
   constructor(
     private readonly httpService: HttpService,
     private readonly cache: TtlCacheService,
-  ) {}
+  ) {
+    this.githubToken = process.env.GITHUB_TOKEN;
+  }
 
   async searchRepositories(
     language: string,
@@ -36,10 +40,19 @@ export class GitHubApiService {
     const query = this.buildQuery(language, createdAfter);
 
     try {
+      const headers: Record<string, string> = {
+        Accept: 'application/vnd.github+json',
+      };
+
+      if (this.githubToken) {
+        headers.Authorization = `Bearer ${this.githubToken}`;
+      }
+
       const response = await firstValueFrom(
         this.httpService.get<{ items: GitHubRepository[] }>(
           GitHubApiService.GITHUB_SEARCH_URL,
           {
+            headers,
             params: {
               q: query,
               sort: 'stars',

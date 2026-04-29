@@ -52,6 +52,19 @@ docker compose up --build
 
 Open http://localhost:8080 in your browser. Backend runs on port 3000, frontend is served via nginx on port 8080.
 
+### GitHub Token (optional)
+
+The unauthenticated GitHub API allows 10 search requests per minute. To increase this to 30 requests/minute, set a personal access token (no scopes required):
+
+```bash
+# Local development
+export GITHUB_TOKEN=ghp_your_token_here
+cd backend && npm run start:dev
+
+# Docker
+GITHUB_TOKEN=ghp_your_token_here docker compose up --build
+```
+
 ### Run Tests
 
 ```bash
