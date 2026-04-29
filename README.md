@@ -44,6 +44,14 @@ npm run dev
 
 Open http://localhost:5173 in your browser.
 
+### Docker (alternative)
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:8080 in your browser. Backend runs on port 3000, frontend is served via nginx on port 8080.
+
 ### Run Tests
 
 ```bash
