@@ -69,6 +69,14 @@ cd backend && npm run start:dev
 GITHUB_TOKEN=ghp_your_token_here docker compose up --build
 ```
 
+### CORS Origin (optional)
+
+By default, the backend allows requests from `http://localhost:5173` (Vite dev server). To allow other origins:
+
+```bash
+export CORS_ORIGIN=http://localhost:5173,https://myapp.com
+```
+
 ### Run Tests
 
 ```bash
@@ -80,6 +88,24 @@ npm test
 cd frontend
 npm test
 ```
+
+### Linting
+
+```bash
+# Backend
+cd backend
+npm run lint
+
+# Frontend
+cd frontend
+npm run lint
+```
+
+ESLint 9 with typescript-eslint is configured for both projects.
+
+### CI
+
+GitHub Actions runs lint and tests automatically on every push to `main` and on pull requests. See `.github/workflows/ci.yml`.
 
 ## Scoring Algorithm
 
