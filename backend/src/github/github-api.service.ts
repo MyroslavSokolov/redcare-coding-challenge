@@ -96,10 +96,12 @@ export class GitHubApiService {
           throw new GitHubRateLimitException(resetTime);
         }
 
-        const message =
+        const baseMessage =
           error.response.data?.message ||
           error.message ||
           'GitHub API error';
+        const detail = error.response.data?.errors?.[0]?.message;
+        const message = detail ? `${baseMessage}: ${detail}` : baseMessage;
         throw new HttpException(message, status);
       }
     }
