@@ -15,8 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm install
+      - run: rm -f package-lock.json && npm install
       - run: npm run lint
         working-directory: backend
       - run: npm run lint
@@ -30,8 +29,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm install
+      - run: rm -f package-lock.json && npm install
       - run: npm test
         working-directory: backend
 
@@ -43,7 +41,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm install
+      - run: rm -f package-lock.json && npm install
       - run: npm test
         working-directory: frontend
