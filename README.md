@@ -184,6 +184,3 @@ The unauthenticated GitHub Search API allows 10 requests per minute. The cache m
 
 ### Shared Types Library
 Two interfaces were duplicated between frontend and backend. Extracting them into a shared npm workspace package eliminates drift and demonstrates monorepo patterns, at the cost of slightly more build configuration.
-
-### No "Load More" / Pagination
-GitHub returns results sorted by stars. Loading additional pages would add lower-quality repos and require re-normalizing all scores (changing numbers users already saw). The configurable result count (10–100) gives users control without this UX confusion.
