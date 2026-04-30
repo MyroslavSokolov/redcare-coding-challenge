@@ -18,7 +18,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:8080'],
+    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:5173'],
   });
 
   const swaggerConfig = new DocumentBuilder()
